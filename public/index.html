@@ -1,37 +1,217 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fake Last.fm</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>Fake Last.fm</h1>
+      <p>Дипломный проект - этап 1 (Вёрстка)</p>
+    </header>
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+    <!-- Поиск (неактивный) -->
+    <div class="search">
+      <input type="text" placeholder="Найти исполнителя..." class="search-input" disabled>
+      <button class="search-button" disabled>Искать</button>
+    </div>
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+    <!-- Топ-15 исполнителей -->
+    <section class="top-section">
+      <h2>🔥 Топ исполнителей</h2>
+      <div class="artists-grid">
+        <!-- Артисты 1-5 -->
+        <div class="artist-card">
+          <img src="https://via.placeholder.com/150" alt="The Weeknd" class="artist-image">
+          <p class="artist-name">The Weeknd</p>
+          <p class="artist-listeners">82.4M слушателей</p>
+        </div>
+        <div class="artist-card">
+          <img src="https://via.placeholder.com/150" alt="Taylor Swift" class="artist-image">
+          <p class="artist-name">Taylor Swift</p>
+          <p class="artist-listeners">78.1M слушателей</p>
+        </div>
+        <div class="artist-card">
+          <img src="https://via.placeholder.com/150" alt="Drake" class="artist-image">
+          <p class="artist-name">Drake</p>
+          <p class="artist-listeners">75.3M слушателей</p>
+        </div>
+        <div class="artist-card">
+          <img src="https://via.placeholder.com/150" alt="Dua Lipa" class="artist-image">
+          <p class="artist-name">Dua Lipa</p>
+          <p class="artist-listeners">67.2M слушателей</p>
+        </div>
+        <div class="artist-card">
+          <img src="https://via.placeholder.com/150" alt="Billie Eilish" class="artist-image">
+          <p class="artist-name">Billie Eilish</p>
+          <p class="artist-listeners">65.8M слушателей</p>
+        </div>
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
+        <!-- Артисты 6-10 -->
+        <div class="artist-card">
+          <img src="https://via.placeholder.com/150" alt="Ed Sheeran" class="artist-image">
+          <p class="artist-name">Ed Sheeran</p>
+          <p class="artist-listeners">64.5M слушателей</p>
+        </div>
+        <div class="artist-card">
+          <img src="https://via.placeholder.com/150" alt="Ariana Grande" class="artist-image">
+          <p class="artist-name">Ariana Grande</p>
+          <p class="artist-listeners">63.7M слушателей</p>
+        </div>
+        <div class="artist-card">
+          <img src="https://via.placeholder.com/150" alt="Kanye West" class="artist-image">
+          <p class="artist-name">Kanye West</p>
+          <p class="artist-listeners">58.9M слушателей</p>
+        </div>
+        <div class="artist-card">
+          <img src="https://via.placeholder.com/150" alt="Justin Bieber" class="artist-image">
+          <p class="artist-name">Justin Bieber</p>
+          <p class="artist-listeners">58.2M слушателей</p>
+        </div>
+        <div class="artist-card">
+          <img src="https://via.placeholder.com/150" alt="Doja Cat" class="artist-image">
+          <p class="artist-name">Doja Cat</p>
+          <p class="artist-listeners">55.1M слушателей</p>
+        </div>
+
+        <!-- Артисты 11-15 -->
+        <div class="artist-card">
+          <img src="https://via.placeholder.com/150" alt="Olivia Rodrigo" class="artist-image">
+          <p class="artist-name">Olivia Rodrigo</p>
+          <p class="artist-listeners">53.8M слушателей</p>
+        </div>
+        <div class="artist-card">
+          <img src="https://via.placeholder.com/150" alt="The Beatles" class="artist-image">
+          <p class="artist-name">The Beatles</p>
+          <p class="artist-listeners">52.4M слушателей</p>
+        </div>
+        <div class="artist-card">
+          <img src="https://via.placeholder.com/150" alt="Eminem" class="artist-image">
+          <p class="artist-name">Eminem</p>
+          <p class="artist-listeners">51.9M слушателей</p>
+        </div>
+        <div class="artist-card">
+          <img src="https://via.placeholder.com/150" alt="Bruno Mars" class="artist-image">
+          <p class="artist-name">Bruno Mars</p>
+          <p class="artist-listeners">50.6M слушателей</p>
+        </div>
+        <div class="artist-card">
+          <img src="https://via.placeholder.com/150" alt="Coldplay" class="artist-image">
+          <p class="artist-name">Coldplay</p>
+          <p class="artist-listeners">49.3M слушателей</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Топ-15 треков -->
+    <section class="top-section">
+      <h2>🎵 Топ треков</h2>
+      <div class="tracks-list">
+        <!-- Треки 1-5 -->
+        <div class="track">
+          <span class="track-number">1</span>
+          <span class="track-name">Blinding Lights</span>
+          <span class="track-artist">The Weeknd</span>
+          <span class="track-plays">1.8B прослушиваний</span>
+        </div>
+        <div class="track">
+          <span class="track-number">2</span>
+          <span class="track-name">Save Your Tears</span>
+          <span class="track-artist">The Weeknd</span>
+          <span class="track-plays">1.5B прослушиваний</span>
+        </div>
+        <div class="track">
+          <span class="track-number">3</span>
+          <span class="track-name">Levitating</span>
+          <span class="track-artist">Dua Lipa</span>
+          <span class="track-plays">1.4B прослушиваний</span>
+        </div>
+        <div class="track">
+          <span class="track-number">4</span>
+          <span class="track-name">Stay</span>
+          <span class="track-artist">The Kid LAROI, Justin Bieber</span>
+          <span class="track-plays">1.3B прослушиваний</span>
+        </div>
+        <div class="track">
+          <span class="track-number">5</span>
+          <span class="track-name">good 4 u</span>
+          <span class="track-artist">Olivia Rodrigo</span>
+          <span class="track-plays">1.2B прослушиваний</span>
+        </div>
+
+        <!-- Треки 6-10 -->
+        <div class="track">
+          <span class="track-number">6</span>
+          <span class="track-name">Montero</span>
+          <span class="track-artist">Lil Nas X</span>
+          <span class="track-plays">1.1B прослушиваний</span>
+        </div>
+        <div class="track">
+          <span class="track-number">7</span>
+          <span class="track-name">Peaches</span>
+          <span class="track-artist">Justin Bieber</span>
+          <span class="track-plays">1.0B прослушиваний</span>
+        </div>
+        <div class="track">
+          <span class="track-number">8</span>
+          <span class="track-name">Kiss Me More</span>
+          <span class="track-artist">Doja Cat ft. SZA</span>
+          <span class="track-plays">980M прослушиваний</span>
+        </div>
+        <div class="track">
+          <span class="track-number">9</span>
+          <span class="track-name">Butter</span>
+          <span class="track-artist">BTS</span>
+          <span class="track-plays">950M прослушиваний</span>
+        </div>
+        <div class="track">
+          <span class="track-number">10</span>
+          <span class="track-name">Bad Habits</span>
+          <span class="track-artist">Ed Sheeran</span>
+          <span class="track-plays">920M прослушиваний</span>
+        </div>
+
+        <!-- Треки 11-15 -->
+        <div class="track">
+          <span class="track-number">11</span>
+          <span class="track-name">Don't Start Now</span>
+          <span class="track-artist">Dua Lipa</span>
+          <span class="track-plays">900M прослушиваний</span>
+        </div>
+        <div class="track">
+          <span class="track-number">12</span>
+          <span class="track-name">Watermelon Sugar</span>
+          <span class="track-artist">Harry Styles</span>
+          <span class="track-plays">880M прослушиваний</span>
+        </div>
+        <div class="track">
+          <span class="track-number">13</span>
+          <span class="track-name">drivers license</span>
+          <span class="track-artist">Olivia Rodrigo</span>
+          <span class="track-plays">850M прослушиваний</span>
+        </div>
+        <div class="track">
+          <span class="track-number">14</span>
+          <span class="track-name">positions</span>
+          <span class="track-artist">Ariana Grande</span>
+          <span class="track-plays">830M прослушиваний</span>
+        </div>
+        <div class="track">
+          <span class="track-number">15</span>
+          <span class="track-name">Mood</span>
+          <span class="track-artist">24kGoldn ft. Iann Dior</span>
+          <span class="track-plays">810M прослушиваний</span>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>© 2024 Fake Last.fm | Данные захардкожены (этап 1)</p>
+    </footer>
+  </div>
+</body>
 </html>
