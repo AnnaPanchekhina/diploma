@@ -1,8 +1,8 @@
-// Конфигурация API
-const API_KEY = '6409a29c7a720dd6499bbd419ef91ce2'; // Замените на ваш ключ
+// API Configuration
+const API_KEY = '6409a29c7a720dd6499bbd419ef91ce2';
 const BASE_URL = 'https://ws.audioscrobbler.com/2.0/';
 
-// Элементы DOM
+// DOM Elements
 const searchInput = document.getElementById('search-input');
 const searchBtn = document.getElementById('search-btn');
 const artistsContainer = document.getElementById('artists-container');
@@ -10,7 +10,7 @@ const tracksContainer = document.getElementById('tracks-container');
 const loading = document.getElementById('loading');
 const errorDisplay = document.getElementById('error');
 
-// Функция для выполнения поиска
+// Search function
 async function performSearch() {
     const query = searchInput.value.trim();
     
@@ -20,45 +20,154 @@ async function performSearch() {
     }
 
     try {
-        loading.style.display = 'block';
-        artistsContainer.innerHTML = '';
-        tracksContainer.innerHTML = '';
+        if (loading) loading.style.display = 'block';
         
-        // Ищем артистов
-        const artists = await searchLastFM(query, 'artist');
-        renderArtists(artists);
+        // Hide main page and show search results
+        document.getElementById('main-page').classList.add('hidden');
+        document.getElementById('search-results').style.display = 'block';
         
-        // Ищем треки
-        const tracks = await searchLastFM(query, 'track');
-        renderTracks(tracks);
+        // Get artist info
+        const artist = await getArtistInfo(query);
+        if (artist) {
+            renderArtistProfile(artist);
+            
+            // Get artist albums
+            const albums = await getArtistAlbums(artist.name);
+            if (albums) renderAlbums(albums);
+            
+            // Get artist top tracks
+            const tracks = await getArtistTopTracks(artist.name);
+            if (tracks) renderArtistTracks(tracks);
+        }
         
     } catch (error) {
         showError('Search failed: ' + error.message);
     } finally {
-        loading.style.display = 'none';
+        if (loading) loading.style.display = 'none';
     }
 }
 
-// Функция для запроса к Last.fm API
-async function searchLastFM(query, type) {
+// API functions
+async function getArtistInfo(artistName) {
     const params = new URLSearchParams({
-        method: `${type}.search`,
-        [`${type}`]: query,
+        method: 'artist.getInfo',
+        artist: artistName,
+        api_key: API_KEY,
+        format: 'json'
+    });
+
+    const response = await fetch(`${BASE_URL}?${params}`);
+    const data = await response.json();
+    return data?.artist;
+}
+
+async function getArtistAlbums(artistName) {
+    const params = new URLSearchParams({
+        method: 'artist.getTopAlbums',
+        artist: artistName,
         api_key: API_KEY,
         format: 'json',
         limit: 8
     });
 
     const response = await fetch(`${BASE_URL}?${params}`);
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
     const data = await response.json();
-    return data.results[`${type}matches`][`${type}`];
+    return data?.topalbums?.album;
 }
 
-// Функции рендеринга
-function renderArtists(artists) {
+async function getArtistTopTracks(artistName) {
+    const params = new URLSearchParams({
+        method: 'artist.getTopTracks',
+        artist: artistName,
+        api_key: API_KEY,
+        format: 'json',
+        limit: 10
+    });
+
+    const response = await fetch(`${BASE_URL}?${params}`);
+    const data = await response.json();
+    return data?.toptracks?.track;
+}
+
+// Rendering functions
+function renderArtistProfile(artist) {
+    const profileContainer = document.getElementById('artist-profile');
+    if (!profileContainer) return;
+    
+    profileContainer.innerHTML = `
+        <div class="artist-profile-photo" 
+             style="background-image: url('${artist.image[3]?.['#text'] || 'https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png'}')">
+        </div>
+        <div class="artist-profile-info">
+            <h1>${artist.name}</h1>
+        </div>
+    `;
+}
+
+function renderAlbums(albums) {
+    const albumsContainer = document.getElementById('albums-container');
+    if (!albumsContainer) return;
+    
+    albumsContainer.innerHTML = albums.map(album => `
+        <div class="album">
+            <div class="album-cover" 
+                 style="background-image: url('${album.image[2]?.['#text'] || 'https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png'}')">
+            </div>
+            <div class="album-info">
+                <h3>${album.name}</h3>
+            </div>
+        </div>
+    `).join('');
+}
+
+function renderArtistTracks(tracks) {
+    const tracksContainer = document.getElementById('artist-tracks-container');
+    if (!tracksContainer) return;
+    
+    tracksContainer.innerHTML = tracks.map((track, index) => `
+        <div class="track">
+            <span class="track-number">${index + 1}</span>
+            <div class="track-photo" 
+                 style="background-image: url('${track.image[2]?.['#text'] || 'https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png'}')">
+            </div>
+            <div class="track-info">
+                <h3>${track.name}</h3>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Initial data loading
+async function loadInitialData() {
+    try {
+        if (loading) loading.style.display = 'block';
+        const [artists, tracks] = await Promise.all([
+            fetchTop('artist'),
+            fetchTop('track')
+        ]);
+        if (artistsContainer && artists) renderInitialArtists(artists);
+        if (tracksContainer && tracks) renderInitialTracks(tracks);
+    } catch (error) {
+        showError('Failed to load initial data: ' + error.message);
+    } finally {
+        if (loading) loading.style.display = 'none';
+    }
+}
+
+async function fetchTop(type) {
+    const params = new URLSearchParams({
+        method: `chart.gettop${type}s`,
+        api_key: API_KEY,
+        format: 'json',
+        limit: 8
+    });
+
+    const response = await fetch(`${BASE_URL}?${params}`);
+    const data = await response.json();
+    return data[`${type}s`]?.[`${type}`] || [];
+}
+
+function renderInitialArtists(artists) {
     artistsContainer.innerHTML = artists.map(artist => `
         <div class="artist">
             <div class="artist-photo" 
@@ -71,7 +180,7 @@ function renderArtists(artists) {
     `).join('');
 }
 
-function renderTracks(tracks) {
+function renderInitialTracks(tracks) {
     tracksContainer.innerHTML = tracks.map(track => `
         <div class="track">
             <div class="track-photo" 
@@ -79,57 +188,37 @@ function renderTracks(tracks) {
             </div>
             <div class="track-info">
                 <h3>${track.name}</h3>
-                <p>${track.artist}</p>
+                <p>${track.artist?.name || 'Unknown Artist'}</p>
             </div>
         </div>
     `).join('');
 }
 
-// Функция показа ошибок
+// Error handling
 function showError(message) {
-    errorDisplay.textContent = message;
-    errorDisplay.style.display = 'block';
-    setTimeout(() => {
-        errorDisplay.style.display = 'none';
-    }, 5000);
-}
-
-// Обработчики событий
-searchBtn.addEventListener('click', performSearch);
-searchInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') performSearch();
-});
-
-// Загрузка начальных данных
-async function loadInitialData() {
-    try {
-        loading.style.display = 'block';
-        const [artists, tracks] = await Promise.all([
-            fetchTop('artist'),
-            fetchTop('track')
-        ]);
-        renderArtists(artists);
-        renderTracks(tracks);
-    } catch (error) {
-        showError('Failed to load initial data: ' + error.message);
-    } finally {
-        loading.style.display = 'none';
+    if (errorDisplay) {
+        errorDisplay.textContent = message;
+        errorDisplay.style.display = 'block';
+        setTimeout(() => {
+            if (errorDisplay) errorDisplay.style.display = 'none';
+        }, 5000);
     }
 }
 
-// Функция для получения топовых данных
-async function fetchTop(type) {
-    const params = new URLSearchParams({
-        method: `chart.gettop${type}s`,
-        api_key: API_KEY,
-        format: 'json',
-        limit: 8
+// Event listeners
+if (searchBtn) searchBtn.addEventListener('click', performSearch);
+if (searchInput) {
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') performSearch();
     });
-
-    const response = await fetch(`${BASE_URL}?${params}`);
-    const data = await response.json();
-    return data[`${type}s`][`${type}`];
 }
 
-// Инициализация
+document.getElementById('back-to-home').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('main-page').classList.remove('hidden');
+    document.getElementById('search-results').style.display = 'none';
+    searchInput.value = '';
+});
+
+// Initialize
 document.addEventListener('DOMContentLoaded', loadInitialData);

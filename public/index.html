@@ -26,17 +26,33 @@
     </header>
 
     <main class="main-content">
-        <section class="music-section">
-            <h1>Music</h1>
-            <div class="hot-artists">
-                <h2>Hot right now</h2>
-                <div class="artist-grid" id="artists-container"></div>
+        <!-- Search Results (hidden by default) -->
+        <section class="search-results" id="search-results" style="display: none;">
+            <div class="artist-profile" id="artist-profile"></div>
+            <div class="artist-albums">
+                <h2>Albums</h2>
+                <div class="albums-grid" id="albums-container"></div>
+            </div>
+            <div class="artist-tracks">
+                <h2>Top Tracks</h2>
+                <div class="track-list" id="artist-tracks-container"></div>
             </div>
         </section>
 
-        <section class="popular-tracks">
-            <h2>Popular tracks</h2>
-            <div class="track-list" id="tracks-container"></div>
+        <!-- Main Page (visible by default) -->
+        <section class="main-page" id="main-page">
+            <section class="music-section">
+                <h1>Music</h1>
+                <div class="hot-artists">
+                    <h2>Hot right now</h2>
+                    <div class="artist-grid" id="artists-container"></div>
+                </div>
+            </section>
+
+            <section class="popular-tracks">
+                <h2>Popular tracks</h2>
+                <div class="track-list" id="tracks-container"></div>
+            </section>
         </section>
 
         <div class="loading" id="loading">Loading...</div>
@@ -51,6 +67,7 @@
                 <a href="#">Terms</a>
                 <a href="#">Privacy</a>
                 <a href="#">Cookies</a>
+                <a href="#" id="back-to-home">Back to home</a>
             </div>
             <div class="copyright">
                 © 2025 Last.fm Ltd. All rights reserved
