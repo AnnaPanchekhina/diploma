@@ -1,8 +1,6 @@
-// API Configuration
 const API_KEY = '6409a29c7a720dd6499bbd419ef91ce2';
 const BASE_URL = 'https://ws.audioscrobbler.com/2.0/';
 
-// DOM Elements
 const searchInput = document.getElementById('search-input');
 const searchBtn = document.getElementById('search-btn');
 const artistsContainer = document.getElementById('artists-container');
@@ -10,7 +8,6 @@ const tracksContainer = document.getElementById('tracks-container');
 const loading = document.getElementById('loading');
 const errorDisplay = document.getElementById('error');
 
-// Search function
 async function performSearch() {
     const query = searchInput.value.trim();
     
@@ -22,20 +19,16 @@ async function performSearch() {
     try {
         if (loading) loading.style.display = 'block';
         
-        // Hide main page and show search results
         document.getElementById('main-page').classList.add('hidden');
         document.getElementById('search-results').style.display = 'block';
         
-        // Get artist info
         const artist = await getArtistInfo(query);
         if (artist) {
             renderArtistProfile(artist);
             
-            // Get artist albums
             const albums = await getArtistAlbums(artist.name);
             if (albums) renderAlbums(albums);
             
-            // Get artist top tracks
             const tracks = await getArtistTopTracks(artist.name);
             if (tracks) renderArtistTracks(tracks);
         }
@@ -47,7 +40,6 @@ async function performSearch() {
     }
 }
 
-// API functions
 async function getArtistInfo(artistName) {
     const params = new URLSearchParams({
         method: 'artist.getInfo',
@@ -89,7 +81,6 @@ async function getArtistTopTracks(artistName) {
     return data?.toptracks?.track;
 }
 
-// Rendering functions
 function renderArtistProfile(artist) {
     const profileContainer = document.getElementById('artist-profile');
     if (!profileContainer) return;
@@ -137,7 +128,6 @@ function renderArtistTracks(tracks) {
     `).join('');
 }
 
-// Initial data loading
 async function loadInitialData() {
     try {
         if (loading) loading.style.display = 'block';
@@ -194,7 +184,6 @@ function renderInitialTracks(tracks) {
     `).join('');
 }
 
-// Error handling
 function showError(message) {
     if (errorDisplay) {
         errorDisplay.textContent = message;
@@ -205,7 +194,6 @@ function showError(message) {
     }
 }
 
-// Event listeners
 if (searchBtn) searchBtn.addEventListener('click', performSearch);
 if (searchInput) {
     searchInput.addEventListener('keypress', (e) => {
@@ -220,5 +208,4 @@ document.getElementById('back-to-home').addEventListener('click', (e) => {
     searchInput.value = '';
 });
 
-// Initialize
 document.addEventListener('DOMContentLoaded', loadInitialData);
